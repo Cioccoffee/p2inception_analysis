@@ -28,21 +28,12 @@ public class Query_DB{
 		    }
                     catch(Exception e){
                                     System.out.println(e.getMessage());
+                                    System.out.println("Error !");
                                     System.exit(0);
                             }
                 
                      
                     
-            }
-
-            public static void main(String [] args) {
-		//appeler le constructeur avec vos propres login mot de passe MySQL
-                    Query_DB maBd = new Query_DB("sql11172818","c3eqIEEExh");
-		    //appel d'une mÃ©thode
-                    
-                     
-                    
-            }
-             
+            }           
              
 }
