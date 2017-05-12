@@ -55,9 +55,9 @@ public class DB_Creation {
 
             //Liste des instructions de création de table
             LinkedList<String> CreationInstructionsList = new LinkedList<String>();
-            CreationInstructionsList.add("");
-            CreationInstructionsList.add("");
-            CreationInstructionsList.add("");
+            CreationInstructionsList.add("create table Users(Name varchar(20) NOT NULL, MoyCycle Time, MoyParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
+            CreationInstructionsList.add("create table Analysis(Subject_Name varchar(20) NOT NULL, DateBegin Date NOT NULL, DateEnd Date, Cycle int(2), Phase varchar(1), primary key(DateBegin,Subject_Name), foreign key (Subject_Name) references Users(Name));");
+            CreationInstructionsList.add("create table Mesure(Subject_Name varchar(20) NOT NULL, Date Datetime NOT NULL, pulse double(4,1), temp1 double(3,1), temp2 double(3,1), mvt int(2), primary key(Date, Subject_Name), foreign key (Subject_Name) references Users(Name));");
             // Prepared Statement
             boolean tableCreated = false;
             for(int i = 0; i < CreationInstructionsList.size(); i++){
