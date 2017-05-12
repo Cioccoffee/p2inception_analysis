@@ -16,6 +16,7 @@ public class P2inception_analysis {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Query_DB maBd = new Query_DB("sql11172818","c3eqIEEExh");
     }
     
 }
