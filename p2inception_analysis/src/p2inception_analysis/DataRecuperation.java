@@ -87,6 +87,7 @@ import jssc.SerialPortException;
                         
                         DataInsertion data_insert = new DataInsertion();
                         data_insert.addMesure(Subject_Name, date, pulse, temp1, temp2, maxAcc, maxGyr, avgAcc, avgGyr);
+                        //doit gérer le reach DB & if not : stockage ds file whose name = current date.getTime() & name stocked in list of files of non added date
 //ajouter dans BD
                     }
                     
