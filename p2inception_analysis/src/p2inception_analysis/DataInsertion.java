@@ -10,5 +10,5 @@ package p2inception_analysis;
  * @author Lucie
  */
 public class DataInsertion {
-    
+         
 }
