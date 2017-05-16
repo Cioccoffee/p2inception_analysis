@@ -40,6 +40,10 @@ public class DB_Creation {
     
     private Connection conn;
     private PreparedStatement createMesureStatement;
+    
+    public static void main(String[] a){
+        DB_Creation creation = new DB_Creation("lucie","r@xt9Wkba9z4N$9g");
+    }
  
     public DB_Creation(String login, String password){
         try {
@@ -49,7 +53,7 @@ public class DB_Creation {
             System.out.println("Driver trouvé...");
 
             //Création d'une connexion sur la base de donnée
-            this.conn = DriverManager.getConnection("jdbc:mysql://https://www.freemysqlhosting.net:3306/sql11172818", login, password);
+            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:10512/p2inception", login, password);
             //this.conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/" + bd, compte, motDePasse);
             System.out.println("Connexion établie...");
 
@@ -57,7 +61,7 @@ public class DB_Creation {
             LinkedList<String> CreationInstructionsList = new LinkedList<String>();
             CreationInstructionsList.add("create table Users(Name varchar(20) NOT NULL, MoyCycle Time, MoyParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
             CreationInstructionsList.add("create table Analysis(Subject_Name varchar(20) NOT NULL, DateBegin Date NOT NULL, DateEnd Date, Cycle int(2), Phase varchar(1), primary key(DateBegin,Subject_Name), foreign key (Subject_Name) references Users(Name));");
-            CreationInstructionsList.add("create table Mesure(Subject_Name varchar(20) NOT NULL, Date Datetime NOT NULL, pulse double(4,1), temp1 double(3,1), temp2 double(3,1), mvt int(2), primary key(Date, Subject_Name), foreign key (Subject_Name) references Users(Name));");
+            CreationInstructionsList.add("create table Mesure(Subject_Name varchar(20) NOT NULL, Date Datetime NOT NULL, pulse int(3), temp1 double(3,1), temp2 double(3,1), moyAcc float(24), moyGyr float(24), max Acc float(24), max Gyr(24), primary key(Date, Subject_Name), foreign key (Subject_Name) references Users(Name));");
             // Prepared Statement
             boolean tableCreated = false;
             for(int i = 0; i < CreationInstructionsList.size(); i++){
@@ -73,6 +77,7 @@ public class DB_Creation {
             //this.selectMesuresStatement = this.conn.prepareStatement("SELECT valeur,idCapteur numInventaire,dateMesure FROM Mesure WHERE idCapteur = ? AND dateMesure >= ? AND dateMesure < ? ;");
 
         } catch (Exception ex) {
+            System.out.println("DB pas trouvée");
             ex.printStackTrace(System.err);
             System.exit(-1);
         }
