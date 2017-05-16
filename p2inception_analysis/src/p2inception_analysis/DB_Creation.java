@@ -53,15 +53,15 @@ public class DB_Creation {
             System.out.println("Driver trouvé...");
 
             //Création d'une connexion sur la base de donnée
-            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:10512/p2inception", login, password);
+            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", login, password);
             //this.conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/" + bd, compte, motDePasse);
             System.out.println("Connexion établie...");
 
             //Liste des instructions de création de table
             LinkedList<String> CreationInstructionsList = new LinkedList<String>();
-            CreationInstructionsList.add("create table Users(Name varchar(20) NOT NULL, AvgCycle Time, AvgParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
-            CreationInstructionsList.add("create table Analysis(Subject_Name varchar(20) NOT NULL, DateBegin Datetimr NOT NULL, DateEnd Datetime, Cycle int(2), Phase varchar(1), primary key(DateBegin,Subject_Name), foreign key (Subject_Name) references Users(Name));");
-            CreationInstructionsList.add("create table Mesure(Subject_Name varchar(20) NOT NULL, Date Datetime NOT NULL, Pulse int(3), Temp1 decimal(3,1), Temp2 decimal(3,1), MaxAcc float(24), MaxGyr float(24), AvgAcc float(24), AvgGyr float(24),  primary key(Date, Subject_Name), foreign key (Subject_Name) references Users(Name));");
+            CreationInstructionsList.add("create table Dreamer(Name varchar(20) NOT NULL, AvgCycle Time, AvgParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
+            CreationInstructionsList.add("create table Analysis(Username varchar(20) NOT NULL, DateBegin Datetime NOT NULL, DateEnd Datetime, Cycle int(2), Phase varchar(1), primary key(DateBegin,Username), foreign key (Userame) references Users(Name));");
+            CreationInstructionsList.add("create table Mesure(Username varchar(20) NOT NULL, Date Datetime NOT NULL, Pulse int(3), Temp1 decimal(3,1), Temp2 decimal(3,1), MaxAcc float(24), MaxGyr float(24), AvgAcc float(24), AvgGyr float(24),  primary key(Date), foreign key (Username) references Users(Name));");
             // Prepared Statement
             boolean tableCreated = false;
             for(int i = 0; i < CreationInstructionsList.size(); i++){
