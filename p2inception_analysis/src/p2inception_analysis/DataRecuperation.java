@@ -9,11 +9,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.util.Date;
+
 /**
  *
  * @author Lucie
  */
 public class DataRecuperation {
+    
+    //attributs = data to collect
+    String Subject_Name ;
+    Date date ;
+    int pulse;
+    double temp1;
+    double temp2;
+    float avgAcc;
+    float avgGyr;
+    float maxAcc;
+    float maxGyr;
+    
+    // Prepared Statement
     
     // connexion avec arduino
  //package fr.insalyon.p2i2.javaarduino;
@@ -121,10 +136,27 @@ import jssc.SerialPortException;
         }
         
     }
-}
+
 
     
     //recuperation des données
+public void read(BufferedReader vcpInput){
+    
+    String line = vcpInput.readLine();
+    if(line!=null){
+        String[] data = line.split(":");
+        temp1 = Double.parseDouble(data[0]);
+        temp2 = Double.parseDouble(data[1]);
+        maxAcc = Float.parseFloat(data[2]);
+        maxGyr = Float.parseFloat(data[3]);
+        avgAcc = Float.parseFloat(data[4]);
+        avgGyr = Float.parseFloat(data[5]);
+        pulse = Integer.parseInt(data[6]);
+        date = new Date(); //faire un format
+        Subject_Name = "";
+    }
+    
+}
     
     //établissment connexion avec remote DB
     //enregistrement direct des tuples
