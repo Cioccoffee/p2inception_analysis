@@ -80,19 +80,21 @@ import jssc.SerialPortException;
                 public void run() {
                     
                     BufferedReader vcpInput = new BufferedReader(new InputStreamReader(vcpChannel.getReader()));
-                    
-                    String line;
+                    String line ;
                     try {
-
-                        while ((line = vcpInput.readLine()) != null) {
-                            
-                            console.println("Data from Arduino: " + line);
-                        }
-
-                    } catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                    while((line = vcpInput.readLine())!= null){
+                        this.read(line);
+                        
+                        DataInsertion data_insert = new DataInsertion();
+                        data_insert.addMesure(Subject_Name, date, pulse, temp1, temp2, maxAcc, maxGyr, avgAcc, avgGyr);
+//ajouter dans BD
                     }
                     
+                    
+                    
+                    
+                } catch(IOException ex){
+                    ex.printStackTrace(System.err);
                 }
             });
             
@@ -136,13 +138,14 @@ import jssc.SerialPortException;
         }
         
     }
+    
 
 
     
     //recuperation des données
-public void read(BufferedReader vcpInput){
+public void read(String line){
     
-    String line = vcpInput.readLine();
+     
     if(line!=null){
         String[] data = line.split(":");
         temp1 = Double.parseDouble(data[0]);
@@ -154,6 +157,10 @@ public void read(BufferedReader vcpInput){
         pulse = Integer.parseInt(data[6]);
         date = new Date(); //faire un format
         Subject_Name = "";
+        
+    }
+    
+    
     }
     
 }
