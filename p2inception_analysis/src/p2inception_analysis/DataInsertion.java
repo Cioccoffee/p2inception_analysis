@@ -38,7 +38,7 @@ public class DataInsertion {
     private PreparedStatement insertAnalysisStatement;
     private PreparedStatement insertMesureStatement;
     
-    public DataInsertion(String compte,String motDePasse){
+    public DataInsertion(String login,String password){
         try {
 
             //Enregistrement de la classe du driver par le driverManager
@@ -46,7 +46,7 @@ public class DataInsertion {
             System.out.println("Driver trouvé...");
 
             //Création d'une connexion sur la base de donnée
-            this.conn = DriverManager.getConnection("jdbc:mysql://https://www.freemysqlhosting.net:3306/sql11172818", compte, motDePasse);
+            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", login, password);
             //this.conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/" + bd, compte, motDePasse);
             System.out.println("Connexion établie...");
             
@@ -69,12 +69,12 @@ public class DataInsertion {
     }
     
     
-    public int addMesure(int pulse, double temp1, double temp2, float MaxAcc, float MaxGyr, float AvgAcc, float AvgGyr) {
+    public int addMesure(Date date,int pulse, double temp1, double temp2, float MaxAcc, float MaxGyr, float AvgAcc, float AvgGyr) {
         try {
-            this.insertMesureStatement.setTimestamp(1, new Timestamp(( new Date() ).getTime())  );
+            this.insertMesureStatement.setTimestamp(1, new Timestamp(date.getTime())  );
             this.insertMesureStatement.setInt(2, pulse);
-            this.insertMesureStatement.setBigDecimal(3, temp1);
-            this.insertMesureStatement.setBigDecimal(4, temp2);
+            this.insertMesureStatement.setDouble(3, temp1);
+            this.insertMesureStatement.setDouble(4, temp2);
             this.insertMesureStatement.setFloat(5, MaxAcc);
             this.insertMesureStatement.setFloat(6, MaxGyr);
             this.insertMesureStatement.setFloat(7, AvgAcc);
@@ -97,7 +97,7 @@ public class DataInsertion {
             }
         }
 
-    public int addAnalysis(String username, Timestamp dateBegin, Timestamp dateEnd, int cyle, String phase) {
+    public int addAnalysis(String username, Timestamp dateBegin, Timestamp dateEnd, int cycle, String phase) {
             try {
                 this.insertAnalysisStatement.setString(1, username  );
                 this.insertAnalysisStatement.setTimestamp(2, dateBegin );
