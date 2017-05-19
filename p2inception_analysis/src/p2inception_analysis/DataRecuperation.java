@@ -10,6 +10,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import java.util.Date;
+import java.io.*;
+
+
+//import fr.insalyon.p2i2.javaarduino.util.Console;
+    
+import fr.insalyon.p2i2.javaarduino.usb.ArduinoUsbChannel;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java-simple-serial-connector-2.8.0.src.java.jssc.SerialPortException;
 
 /**
  *
@@ -18,47 +28,43 @@ import java.util.Date;
 public class DataRecuperation {
     
     //attributs = data to collect
-    String Subject_Name ;
-    Date date ;
-    int pulse;
-    double temp1;
-    double temp2;
-    float avgAcc;
-    float avgGyr;
-    float maxAcc;
-    float maxGyr;
+    private String Subject_Name ;
+    private Date date ;
+    private int pulse;
+    private double temp1;
+    private double temp2;
+    private float avgAcc;
+    private float avgGyr;
+    private float maxAcc;
+    private float maxGyr;
     
-    // Prepared Statement
+    
     
     // connexion avec arduino
  //package fr.insalyon.p2i2.javaarduino;
 
-/*import fr.insalyon.p2i2.javaarduino.util.Console;
+
     
-import fr.insalyon.p2i2.javaarduino.usb.ArduinoUsbChannel;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import jssc.SerialPortException;
-*/
 
     
     public static void main( String[] args )
     {
-        final Console console = new Console();
+        //final Console console = new Console();
         
-        console.log( "DEBUT du programme TestArduino !.." );
+        //console.log( "DEBUT du programme TestArduino !.." );
+        
+        final DataRecuperation dataRecup = new DataRecuperation();
         
         String port = null;
         
         do {
         
-            console.log( "RECHERCHE d'un port disponible..." );
+            //console.log( "RECHERCHE d'un port disponible..." );
             port = ArduinoUsbChannel.getOneComPort();
             
             if (port == null) {
-                console.log( "Aucun port disponible!" );
-                console.log( "Nouvel essai dans 5s" );
+                //console.log( "Aucun port disponible!" );
+                //console.log( "Nouvel essai dans 5s" );
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
@@ -70,7 +76,7 @@ import jssc.SerialPortException;
         
         port = "COM10";
         
-        console.println("Connection au Port " + port);
+        //console.println("Connection au Port " + port);
         try {
 
             final ArduinoUsbChannel vcpChannel = new ArduinoUsbChannel(port);
@@ -82,21 +88,25 @@ import jssc.SerialPortException;
                     BufferedReader vcpInput = new BufferedReader(new InputStreamReader(vcpChannel.getReader()));
                     String line ;
                     try {
-                    while((line = vcpInput.readLine())!= null){
-                        this.read(line);
-                        
-                        DataInsertion data_insert = new DataInsertion();
-                        data_insert.addMesure(Subject_Name, date, pulse, temp1, temp2, maxAcc, maxGyr, avgAcc, avgGyr);
-                        //doit gérer le reach DB & if not : stockage ds file whose name = current date.getTime() & name stocked in list of files of non added date
-//ajouter dans BD
+                        PrintWriter writer = new PrintWriter( new OutputStreamWriter(new FileOutputStream("SavedData")));
+                        while((line = vcpInput.readLine())!= null){
+                            dataRecup.read(line);
+
+                            DataInsertion data_insert = new DataInsertion("lucie","r@xt9Wkba9z4N$9g");
+                            data_insert.addMesure(dataRecup.date, dataRecup.pulse, dataRecup.temp1, dataRecup.temp2, dataRecup.maxAcc, dataRecup.maxGyr, dataRecup.avgAcc, dataRecup.avgGyr);
+                            //doit gérer le reach DB & if not : stockage ds file whose name = current date.getTime() & name stocked in list of files of non added date
+                            //ajouter dans BD
+
+                        }
+                    
+                    
+                    
+                    
+                    } catch(IOException ex){
+                        ex.printStackTrace(System.err);
                     }
-                    
-                    
-                    
-                    
-                } catch(IOException ex){
-                    ex.printStackTrace(System.err);
                 }
+                
             });
             
             readingThread.start();
@@ -105,7 +115,7 @@ import jssc.SerialPortException;
             
             boolean exit = false;
             
-            while (!exit) {
+            /*while (!exit) {
             
                 String line = console.readLine("Envoyer une ligne (ou 'fin') > ");
             
@@ -121,47 +131,50 @@ import jssc.SerialPortException;
                 vcpChannel.getWriter().write(line.getBytes("UTF-8"));
                 vcpChannel.getWriter().write('\n');
             
-            }
+            }*/
             
             vcpChannel.close();
             
             readingThread.interrupt();
+            
             try {
                 readingThread.join(1000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace(System.err);
             }
-
+            
+              
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
         } catch (SerialPortException ex) {
             ex.printStackTrace(System.err);
         }
         
+    
     }
     
 
 
     
-    //recuperation des données
-public void read(String line){
-    
-     
-    if(line!=null){
-        String[] data = line.split(":");
-        temp1 = Double.parseDouble(data[0]);
-        temp2 = Double.parseDouble(data[1]);
-        maxAcc = Float.parseFloat(data[2]);
-        maxGyr = Float.parseFloat(data[3]);
-        avgAcc = Float.parseFloat(data[4]);
-        avgGyr = Float.parseFloat(data[5]);
-        pulse = Integer.parseInt(data[6]);
-        date = new Date(); //faire un format
-        Subject_Name = "";
-        
-    }
-    
-    
+    //recuperation des données et set de la date
+    public void read(String line){
+
+
+        if(line!=null){
+            String[] data = line.split(":");
+            temp1 = Double.parseDouble(data[0])/10.0;
+            temp2 = Double.parseDouble(data[1])/10.0;
+            maxAcc = Float.parseFloat(data[2]);
+            maxGyr = Float.parseFloat(data[3]);
+            avgAcc = Float.parseFloat(data[4]);
+            avgGyr = Float.parseFloat(data[5]);
+            pulse = Integer.parseInt(data[6]);
+            date = new Date(); //faire un format
+            Subject_Name = "";
+
+        }
+
+
     }
     
 }
@@ -171,4 +184,4 @@ public void read(String line){
     //SI DB ne peut pas être atteinte, création fichier output et écriture dedans
     //ajout du nom du fichier non envoyé dans une liste attribut qu'on ouvre à chaque XXX
     
-}
+
