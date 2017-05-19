@@ -110,7 +110,29 @@ public class DataInsertion {
                 return -1;
             }
         }
+    
+    
+    public static void main(String[] args){
+        
+        
+        DataInsertion data_insert = new DataInsertion("lucie","r@xt9Wkba9z4N$9g");
+        data_insert.addMesure(new Date(), 64, 37.3,38.5,(float)200.7,(float)608.92,(float)66.7,(float)259.8);
+        
+        Query_DB query = new Query_DB();
+        String infos = query.getInfoMesureAll();
+        System.out.println(infos);
+        
+        
+    }
+    
+    
+    
+    
+    
+}
+    
+    
 
        
-}
+
 
