@@ -13,7 +13,7 @@ import java.util.Date;
 import java.io.*;
 
 
-//import fr.insalyon.p2i2.javaarduino.util.Console;
+import fr.insalyon.p2i2.javaarduino.util.Console;
     
 import fr.insalyon.p2i2.javaarduino.usb.ArduinoUsbChannel;
 import java.io.BufferedReader;
@@ -49,9 +49,9 @@ public class DataRecuperation {
     
     public static void main( String[] args )
     {
-        //final Console console = new Console();
+        final Console console = new Console();
         
-        //console.log( "DEBUT du programme TestArduino !.." );
+        console.log( "DEBUT du programme TestArduino !.." );
         
         final DataRecuperation dataRecup = new DataRecuperation();
         
@@ -59,12 +59,12 @@ public class DataRecuperation {
         
         do {
         
-            //console.log( "RECHERCHE d'un port disponible..." );
+            console.log( "RECHERCHE d'un port disponible..." );
             port = ArduinoUsbChannel.getOneComPort();
             
             if (port == null) {
-                //console.log( "Aucun port disponible!" );
-                //console.log( "Nouvel essai dans 5s" );
+                console.log( "Aucun port disponible!" );
+                console.log( "Nouvel essai dans 5s" );
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
@@ -76,7 +76,7 @@ public class DataRecuperation {
         
         port = "COM10";
         
-        //console.println("Connection au Port " + port);
+        console.println("Connection au Port " + port);
         try {
 
             final ArduinoUsbChannel vcpChannel = new ArduinoUsbChannel(port);
@@ -88,7 +88,7 @@ public class DataRecuperation {
                     BufferedReader vcpInput = new BufferedReader(new InputStreamReader(vcpChannel.getReader()));
                     String line ;
                     try {
-                        PrintWriter writer = new PrintWriter( new OutputStreamWriter(new FileOutputStream("SavedData")));
+                        PrintWriter writer = new PrintWriter( new OutputStreamWriter(new FileOutputStream("SavedData\\"+(new Date()).getTime()+".csv")));
                         while((line = vcpInput.readLine())!= null){
                             dataRecup.read(line);
 
@@ -96,6 +96,7 @@ public class DataRecuperation {
                             data_insert.addMesure(dataRecup.date, dataRecup.pulse, dataRecup.temp1, dataRecup.temp2, dataRecup.maxAcc, dataRecup.maxGyr, dataRecup.avgAcc, dataRecup.avgGyr);
                             //doit gérer le reach DB & if not : stockage ds file whose name = current date.getTime() & name stocked in list of files of non added date
                             //ajouter dans BD
+                            writer.println("data : " + dataRecup.date +" "+ dataRecup.pulse +" "+dataRecup.temp1+" "+dataRecup.temp2+" "+dataRecup.maxAcc+" "+dataRecup.maxGyr+" "+dataRecup.avgAcc+" "+dataRecup.avgGyr );
 
                         }
                     
@@ -115,7 +116,7 @@ public class DataRecuperation {
             
             boolean exit = false;
             
-            /*while (!exit) {
+            while (!exit) {
             
                 String line = console.readLine("Envoyer une ligne (ou 'fin') > ");
             
@@ -131,7 +132,7 @@ public class DataRecuperation {
                 vcpChannel.getWriter().write(line.getBytes("UTF-8"));
                 vcpChannel.getWriter().write('\n');
             
-            }*/
+            }
             
             vcpChannel.close();
             
