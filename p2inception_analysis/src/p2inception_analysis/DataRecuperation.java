@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java-simple-serial-connector-2.8.0.src.java.jssc.SerialPortException;
+import java-simple-serial-connector-2.8.0.src.java.jssc.SerialNativeInterface;
 
 /**
  *
@@ -74,7 +75,7 @@ public class DataRecuperation {
 
         } while (port == null);
         
-        port = "COM10";
+        port = "COM3";
         
         console.println("Connection au Port " + port);
         try {
@@ -92,7 +93,7 @@ public class DataRecuperation {
                         while((line = vcpInput.readLine())!= null){
                             dataRecup.read(line);
 
-                            DataInsertion data_insert = new DataInsertion("lucie","r@xt9Wkba9z4N$9g");
+                            DataInsertion data_insert = new DataInsertion();
                             data_insert.addMesure(dataRecup.date, dataRecup.pulse, dataRecup.temp1, dataRecup.temp2, dataRecup.maxAcc, dataRecup.maxGyr, dataRecup.avgAcc, dataRecup.avgGyr);
                             //doit gérer le reach DB & if not : stockage ds file whose name = current date.getTime() & name stocked in list of files of non added date
                             //ajouter dans BD
@@ -149,7 +150,10 @@ public class DataRecuperation {
             ex.printStackTrace(System.err);
         } catch (SerialPortException ex) {
             ex.printStackTrace(System.err);
+        }catch (SerialNativeInterface sni){
+            sni.printStackTrace(System.err);
         }
+       
         
     
     }
@@ -177,6 +181,13 @@ public class DataRecuperation {
 
 
     }
+    
+    public boolean putMesuresInDB(){
+        DataInsertion data_insert =  new DataInsertion();
+        data_insert.addMesure(date, pulse, temp1, temp2, maxAcc, maxGyr, avgAcc, avgGyr);
+        //faire query temp for last date
+    }
+
     
 }
     
