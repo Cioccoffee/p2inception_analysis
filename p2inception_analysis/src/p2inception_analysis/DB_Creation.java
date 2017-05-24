@@ -60,10 +60,10 @@ public class DB_Creation {
             //Liste des instructions de création de table
             LinkedList<String> CreationInstructionsList = new LinkedList<String>();
             //CreationInstructionsList.add("drop table Analysis");
-            
-            //CreationInstructionsList.add("create table Dreamer(Name varchar(20) NOT NULL, AvgCycle Time, AvgParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
-            CreationInstructionsList.add("create table Analysis(Username varchar(20) NOT NULL default 'null', DateBegin Datetime NOT NULL, DateEnd Datetime, Cycle int(2), Phase varchar(1),WakingDuringPhase boolean, primary key(DateBegin,Username), foreign key (Username) references Users(Name));");
-            //CreationInstructionsList.add("create table Mesure(Username varchar(20) NOT NULL default 'null', Date Datetime NOT NULL, Pulse int(3), Temp1 double(3,1), Temp2 double(3,1), Temp double(3,1), MaxAcc float(24), MaxGyr float(24), AvgAcc float(24), AvgGyr float(24),  primary key(Date), foreign key (Username) references Users(Name));");
+            CreationInstructionsList.add("alter table Analysis add constraint defaultUsername default 'null' for Username;");
+            //CreationInstructionsList.add("create table User(Name varchar(20) NOT NULL, AvgCycle Time, AvgParadox Time, LucidDream int(2), LastAnalysis Date, primary key(Name));");
+            //CreationInstructionsList.add("create table Analysis(Username varchar(20) NOT NULL default 'null', DateBegin Datetime NOT NULL, DateEnd Datetime, Cycle int(2), Phase varchar(1),WakingDuringPhase boolean, primary key(DateBegin,Username), foreign key (Username) references User(Name));");
+            //CreationInstructionsList.add("create table Mesure(Username varchar(20) NOT NULL default 'null', Date Datetime NOT NULL, Pulse int(3), Temp1 double(3,1), Temp2 double(3,1), Temp double(3,1), MaxAcc float(24), MaxGyr float(24), AvgAcc float(24), AvgGyr float(24),  primary key(Date), foreign key (Username) references User(Name));");
             
             boolean tableCreated = false;
             for(int i = 0; i < CreationInstructionsList.size(); i++){
