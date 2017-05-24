@@ -26,7 +26,7 @@ public class Query_DB{
                                 Class.forName("com.mysql.jdbc.Driver");
 				System.out.println("Driver trouvÃ©...");
 				 //CrÃ©ation d'une connexion sur la base de donnÃ©e
-				this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", "lucie", " r@xt9Wkba9z4N$9g");
+				this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", "lucie", "r@xt9Wkba9z4N$9g");
                                 System.out.println("Connexion Ã©tablie...");
                                 
                                 
@@ -50,8 +50,10 @@ public class Query_DB{
             while(rs.next()){
                 infos += rs.getInt("pulse")+rs.getDouble("Temp1")+rs.getDouble("Temp2")+rs.getFloat("maxAcc");
             }
-        }catch(IOException ex){
-            infos = "err";
+        }catch(SQLException ex){
+            infos ="err";
+        /*}catch(IOException ex){
+            infos = "err";*/
         }
         
         return infos;
