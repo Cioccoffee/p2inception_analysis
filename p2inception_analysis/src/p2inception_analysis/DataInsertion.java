@@ -38,7 +38,13 @@ public class DataInsertion {
     private PreparedStatement insertAnalysisStatement;
     private PreparedStatement insertMesureStatement;
     
-    public DataInsertion(String login,String password){
+    private PreparedStatement analyseTemp1OutStatement;
+    private PreparedStatement analyseTemp2OutStatement;
+    private PreparedStatement analyseTempBothInStatement;
+
+
+    
+    public DataInsertion(){
         try {
 
             //Enregistrement de la classe du driver par le driverManager
@@ -46,7 +52,7 @@ public class DataInsertion {
             System.out.println("Driver trouvé...");
 
             //Création d'une connexion sur la base de donnée
-            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", login, password);
+            this.conn = DriverManager.getConnection("jdbc:mysql://nas-caranton.dynv6.net:995/p2inception", "lucie","r@xt9Wkba9z4N$9g");
             //this.conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/" + bd, compte, motDePasse);
             System.out.println("Connexion établie...");
             
@@ -57,10 +63,17 @@ public class DataInsertion {
 
             String insertAnalysisLine = "INSERT INTO Analysis (UserName, DateBegin, DateEnd, Cycle, Phase) VALUES (?,?,?,?,?);";
 
-
+            String analyseTemp1Out = "update Mesure set Temp=Temp1 where (Temp2>=39 or Temp2<=36.5) and Temp1>=36.5 and Temp1<=39 and where Date = ?;";
+            String analyseTemp2Out ="update Mesure set Temp=Temp2 where (Temp1>=39 or Temp1<=36.5) and Temp2>=36.5 and Temp2<=39 and where Date = ?;";
+            String analyseTempBothIn ="update Mesure set Temp=(Temp1+Temp2)/2.0 where Temp2>=36.5 and Temp2<=39 and Temp1>=36.5 and Temp1<=39 and where Date = ?;";
+            
             this.insertMesureStatement = this.conn.prepareStatement(insertMesureLine);
             this.insertUsersStatement = this.conn.prepareStatement(insertUsersLine);
             this.insertAnalysisStatement = this.conn.prepareStatement(insertAnalysisLine);
+            
+            this.analyseTemp1OutStatement = this.conn.prepareStatement(analyseTemp1Out);
+            this.analyseTemp2OutStatement = this.conn.prepareStatement(analyseTemp1Out);
+            this.analyseTempBothInStatement = this.conn.prepareStatement(analyseTemp1Out);
 
         }catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace(System.err);
@@ -117,6 +130,9 @@ public class DataInsertion {
         
         DataInsertion data_insert = new DataInsertion("lucie","r@xt9Wkba9z4N$9g");
         data_insert.addMesure(new Date(), 64, 37.3,38.5,(float)200.7,(float)608.92,(float)66.7,(float)259.8);
+        
+        this.analyseTemp1OutStatement.setTimestamp(new Timestamp(this.date.getTime()));
+        this.analyseTemp1OutStatement.executeUpdate();
         
         Query_DB query = new Query_DB();
         String infos = query.getInfoMesureAll();
