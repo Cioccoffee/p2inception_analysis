@@ -46,7 +46,7 @@ public class UI extends JFrame{
         panneauUser.add(textUsername);
         
         JButton myButtonCherche = new JButton("Chercher");
-        myButtonCherche.setBounds(350, 0, 60, 60);
+        myButtonCherche.setBounds(550, 0, 100, 60);
         myButtonCherche.setBackground(Color.white);
         myButtonCherche.setForeground(Color.black);
         panneauUser.add(myButtonCherche);
